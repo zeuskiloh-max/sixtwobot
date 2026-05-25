@@ -20,7 +20,7 @@ import requests
 # TELEGRAM CONFIG
 # ====================================
 
-TOKEN = "PASTE_YOUR_NEW_BOT_TOKEN"
+TOKEN = "8787667902:AAEj_2bxGPjBiH5hi2rGem1XgD1FuQxhrO0"
 
 ADMIN_ID = 7355302122
 
