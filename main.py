@@ -1,3 +1,10 @@
+import os
+import sqlite3
+import asyncio
+import logging
+from datetime import datetime, timedelta
+
+import requests
 from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import (
     Application,
@@ -6,12 +13,6 @@ from telegram.ext import (
     ContextTypes,
     filters,
 )
-
-from datetime import datetime, timedelta
-import sqlite3
-import asyncio
-import requests
-import logging
 
 # =========================================
 # CONFIG
@@ -30,8 +31,10 @@ GROUP_LINK = "https://t.me/+z0zKkLWDdps4OGQ0"
 # =========================================
 
 API_USERNAME = "cT1F4Py83BsCQVx5H0Fs"
+
 API_PASSWORD = "bWVYoV5SbWts5kwLr5Y40TewMqYRpWnDpvGTZEPX"
-CHANNEL_ID = 8506  # YOUR PAYHERO CHANNEL ID
+
+CHANNEL_ID = 8506
 
 # =========================================
 # LOGGING
@@ -284,10 +287,6 @@ async def grant_access(
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text
 
-    # =====================
-    # PLAN SELECTION
-    # =====================
-
     plan_buttons = {
         "📅 Daily": "daily",
         "⭐ Basic": "basic",
@@ -318,10 +317,6 @@ Example:
 
         return
 
-    # =====================
-    # OTHER BUTTONS
-    # =====================
-
     if text == "⏳ My Subscription":
         await subscription_status(update)
         return
@@ -346,10 +341,6 @@ Example:
             "📞 Contact Admin for assistance."
         )
         return
-
-    # =====================
-    # PHONE NUMBER PROCESS
-    # =====================
 
     if "selected_plan" not in context.user_data:
         return
@@ -382,14 +373,7 @@ Example:
         "✅ STK Push sent successfully.\n\nComplete payment on your phone."
     )
 
-    # =====================================
-    # TEMPORARY PAYMENT CONFIRMATION
-    # =====================================
-
     await asyncio.sleep(15)
-
-    # You said you will improve security later.
-    # Replace this later with real payment verification.
 
     await grant_access(update, context, plan_key)
 
@@ -439,7 +423,7 @@ async def remove_expired(context: ContextTypes.DEFAULT_TYPE):
 
 
 # =========================================
-# WELCOME NEW USERS
+# WELCOME USERS
 # =========================================
 
 
@@ -498,7 +482,7 @@ async def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 # =========================================
-# ADMIN USERS COMMAND
+# USERS COMMAND
 # =========================================
 
 
@@ -532,13 +516,9 @@ async def error_handler(update, context):
 def main():
     app = Application.builder().token(TOKEN).build()
 
-    # COMMANDS
-
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("broadcast", broadcast))
     app.add_handler(CommandHandler("users", users))
-
-    # NEW MEMBERS
 
     app.add_handler(
         MessageHandler(
@@ -547,8 +527,6 @@ def main():
         )
     )
 
-    # TEXT MESSAGES
-
     app.add_handler(
         MessageHandler(
             filters.TEXT & ~filters.COMMAND,
@@ -556,15 +534,11 @@ def main():
         )
     )
 
-    # AUTO REMOVE EXPIRED USERS
-
     app.job_queue.run_repeating(
         remove_expired,
         interval=60,
         first=10,
     )
-
-    # ERROR HANDLER
 
     app.add_error_handler(error_handler)
 
