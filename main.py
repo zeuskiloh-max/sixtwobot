@@ -17,7 +17,7 @@ import logging
 # CONFIG
 # =========================================
 
-TOKEN = "8787667902:AAEj_2bxGPjBiH5hi2rGem1XgD1FuQxhrO0"
+TOKEN = "8787667902:AAGmQKmePgm2-pUD25oOwSuGn5mSN9elL0w"
 
 ADMIN_ID = 7355302122
 
